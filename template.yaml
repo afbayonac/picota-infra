@@ -62,3 +62,40 @@ Resources:
     Properties:
       CloudFrontOriginAccessIdentityConfig:
         Comment: 'origin identity'
+
+
+  PicotaDNSRecords: 
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneName: picota.org
+      RecordSets:
+        - Name: 
+            Fn::sub: ${env}.picota.org
+          Type: A
+          AliasTarget:
+            HostedZoneId: Z08489623VIWIKFASFAWF
+            DNSName: 
+              Fn::GetAtt: PicotaCDNFrontend.DomainName
+
+  # PicotaCertificateFrontend:
+  #   Type: AWS::CertificateManager::Certificate
+  #   Properties:
+  #     DomainName: picota.org
+  #     DomainValidationOptions:
+  #       - DomainName: picota.org
+  #         HostedZoneId: 
+  #     ValidationMethod: 'DNS'
+  
+  # PicotaRoute53RecordSetGroup:
+  #   Type: AWS::Route53::RecordSet
+  #   Properties:
+  #     Name: picota.org
+  #     Type: A
+  #     HostedZoneId: 
+  #       Ref: HostedZoneId
+  #     AliasTarget:
+  #       DNSName: 
+  #         Fn::GetAtt: ApiGWCustomDomain.DistributionDomainName
+  #       EvaluateTargetHealth: false
+  #       HostedZoneId: 
+  #         Fn::GetAtt: ApiGWCustomDomain.DistributionHostedZoneId

@@ -44,5 +44,6 @@ jobs:
           template: template.yaml
           parameter-overrides: >-
             env=dev
+            FrontDomain=${{ secrets.FRONT_DOMAIN}}
 
 

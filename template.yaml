@@ -1,0 +1,13 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  KeyName:
+    Description:
+    Type: 
+
+Resourses:
+  PicotaBucketFrontend:
+    Type: AWS::S3::Bucket
+    Properties: 
+      BucketName: 
+        Fn::Sub: ${AWS::StackName}-${AWS::Region}-${AWS::AccountId}

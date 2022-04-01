@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 Parameters:
   env: 
     Description: "enviroment of deploy"
-    Type: env
+    Type: String
 
 Resourses:
   PicotaBucketFrontend:

@@ -5,7 +5,7 @@ Parameters:
     Description: "enviroment of deploy"
     Type: String
 
-Resourses:
+Resources:
   PicotaBucketFrontend:
     Type: AWS::S3::Bucket
     Properties: 

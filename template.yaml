@@ -20,7 +20,7 @@ Resources:
     Type: AWS::S3::BucketPolicy
     Properties:
       Bucket: 
-        Fn::Ref: PicotaBucketFrontend
+        Ref: PicotaBucketFrontend
       PolicyDocument:
         Version: '2012-10-17'
         Statement:

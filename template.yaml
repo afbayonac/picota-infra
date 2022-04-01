@@ -16,10 +16,11 @@ Resources:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: AES256
 
-  PicotaBucketPolicyFrontend2:
+  PicotaBucketPolicyFrontend:
     Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: private-bucket
+      Bucket: 
+        Fn::Ref: PicotaBucketFrontend
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -28,7 +29,8 @@ Resources:
               AWS: 
                 Fn::Sub: 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${PicotaCDNOAI}'
             Action: 's3:GetObject'
-            Resource: arn:aws:s3:::private-bucket/*
+            Resource: 
+              Fn::Sub: ${PicotaBucketFrontend.Arn}/*
 
   PicotaCDNFrontend:
     Type: AWS::CloudFront::Distribution

@@ -4,6 +4,9 @@ Parameters:
   env: 
     Description: "enviroment of deploy"
     Type: String
+  frontDomain: 
+    Description: "domain asigned to bucket frontend"
+    Type: String
 
 Resources:
   PicotaBucketFrontend:

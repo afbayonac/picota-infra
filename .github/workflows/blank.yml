@@ -43,7 +43,7 @@ jobs:
           name: picota-aws-dev-stack
           template: template.yaml
           parameter-overrides: >-
-            env=dev
+            env=dev,
             FrontDomain=${{ secrets.FRONT_DOMAIN}}
 
 

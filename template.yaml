@@ -10,4 +10,53 @@ Resources:
     Type: AWS::S3::Bucket
     Properties: 
       BucketName: 
-        Fn::Sub: ${AWS::StackName}-${AWS::Region}-${AWS::AccountId}-${env}
+        Fn::Sub: picota-bucket-frontend-${env}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+  PicotaBucketPolicyFrontend:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: private-bucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: 
+                Fn::Sub: 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${PicotaDNSOAI}'
+            Action: 's3:GetObject'
+            Resource: arn:aws:s3:::private-bucket/*
+
+  PicotaCDNFrontend:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+          - DomainName: 
+              Fn::GetAtt: [PicotaBucketFrontend, DomainName]
+            Id: picota-bucket-frontend
+            S3OriginConfig:
+              OriginAccessIdentity: 
+                Fn::Sub: 'origin-access-identity/cloudfront/${PicotaDNSOAI}'
+        Enabled: 'true'
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          TargetOriginId: picota-bucket-frontend
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: none
+          ViewerProtocolPolicy: redirect-to-https
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: true
+
+  PicotaDNSOAI:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: 'origin identity'

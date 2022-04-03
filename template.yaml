@@ -9,6 +9,7 @@ Parameters:
     Type: String
 
 Resources:
+
   PicotaBucketFrontend:
     Type: AWS::S3::Bucket
     Properties: 
@@ -66,9 +67,19 @@ Resources:
       CloudFrontOriginAccessIdentityConfig:
         Comment: 'origin identity'
 
+  PicotaHostedZone:
+    Type: "AWS::Route53::HostedZone"
+    Properties:
+      Name:
+        Ref: picota.org
+      HostedZoneConfig:
+        Comment: 
+          Fn::Sub: HostZone picota ${env}
 
   PicotaDNSRecords: 
     Type: AWS::Route53::RecordSetGroup
+    DependsOn:
+      - PicotaHostedZone:
     Properties:
       HostedZoneName: picota.org
       RecordSets:

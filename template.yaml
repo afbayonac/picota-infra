@@ -77,7 +77,7 @@ Resources:
             Fn::Sub: ${env}.picota.org
           Type: A
           AliasTarget:
-            HostedZoneId: Z03106681HAK9G20RE56N
+            HostedZoneId: Z2FDTNDATAQYW2
             DNSName: 
               Fn::GetAtt: PicotaCDNFrontend.DomainName
 

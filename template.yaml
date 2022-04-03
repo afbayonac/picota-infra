@@ -70,11 +70,11 @@ Resources:
   PicotaDNSRecords: 
     Type: AWS::Route53::RecordSetGroup
     Properties:
-      HostedZoneId: picota.org.
+      HostedZoneId: Z03106681HAK9G20RE56N
       Comment: add sub domain
       RecordSets:
         - Name: 
-            Fn::Sub: ${env}.picota.org.
+            Fn::Sub: ${env}.picota.org
           Type: A
           AliasTarget:
             HostedZoneId: Z03106681HAK9G20RE56N

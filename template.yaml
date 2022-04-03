@@ -79,7 +79,7 @@ Resources:
   PicotaDNSRecords: 
     Type: AWS::Route53::RecordSetGroup
     DependsOn:
-      - PicotaHostedZone
+    - PicotaHostedZone
     Properties:
       HostedZoneName: picota.org
       RecordSets:

@@ -75,7 +75,7 @@ Resources:
       RecordSets:
         - Name: 
             Fn::Sub: ${env}.picota.org
-          Type: A
+          Type: CNAME
           AliasTarget:
             HostedZoneId: Z2FDTNDATAQYW2
             DNSName: 
@@ -86,15 +86,15 @@ Resources:
   #   Properties:
   #     DomainName: picota.org
   #     DomainValidationOptions:
-  #       - DomainName: picota.org
-  #         HostedZoneId: 
-  #     ValidationMethod: 'DNS'
+  #       - DomainName: dev.picota.org
+  #         HostedZoneId: Z03106681HAK9G20RE56N
+  #     ValidationMethod: DNS
   
   # PicotaRoute53RecordSetGroup:
   #   Type: AWS::Route53::RecordSet
   #   Properties:
   #     Name: picota.org
-  #     Type: A
+  #     Type: CNAME
   #     HostedZoneId: 
   #       Ref: HostedZoneId
   #     AliasTarget:

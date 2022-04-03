@@ -67,26 +67,17 @@ Resources:
       CloudFrontOriginAccessIdentityConfig:
         Comment: 'origin identity'
 
-  PicotaHostedZone:
-    Type: "AWS::Route53::HostedZone"
-    Properties:
-      Name: picota.org
-      HostedZoneConfig:
-        Comment: 
-          Fn::Sub: HostZone picota ${env}
-
   PicotaDNSRecords: 
     Type: AWS::Route53::RecordSetGroup
-    DependsOn:
-    - PicotaHostedZone
     Properties:
-      HostedZoneName: picota.org
+      HostedZoneId: Z03106681HAK9G20RE56N
+      Comment: add sub domain
       RecordSets:
         - Name: 
-            Fn::Sub: ${env}.picota.org
+            Fn::Sub: ${env}.picota.org.
           Type: A
           AliasTarget:
-            HostedZoneId: Z08489623VIWIKFASFAWF
+            HostedZoneId: Z03106681HAK9G20RE56N
             DNSName: 
               Fn::GetAtt: PicotaCDNFrontend.DomainName
 

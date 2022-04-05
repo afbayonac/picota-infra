@@ -7,6 +7,10 @@ Parameters:
   frontDomain: 
     Description: "domain asigned to bucket frontend"
     Type: String
+  hostedZoneId:
+    Description: ""
+    Default: Z03106681HAK9G20RE56N
+    Type: String
 
 Resources:
 
@@ -70,7 +74,7 @@ Resources:
   PicotaDNSRecords: 
     Type: AWS::Route53::RecordSetGroup
     Properties:
-      HostedZoneId: Z03106681HAK9G20RE56N
+      HostedZoneId: ${hostedZoneId}
       Comment: add sub domain
       RecordSets:
         - Name: 
@@ -81,25 +85,34 @@ Resources:
             DNSName: 
               Fn::GetAtt: PicotaCDNFrontend.DomainName
 
-  # PicotaCertificateFrontend:
-  #   Type: AWS::CertificateManager::Certificate
-  #   Properties:
-  #     DomainName: picota.org
-  #     DomainValidationOptions:
-  #       - DomainName: dev.picota.org
-  #         HostedZoneId: Z03106681HAK9G20RE56N
-  #     ValidationMethod: DNS
+PicotaCertificateFrontend:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: 
+        Fn::Sub: ${env}.picota.org
+      DomainValidationOptions:
+        - DomainName: dev.picota.org
+          HostedZoneId: 
+            Fn::Sub: ${hostedZoneId}
+      ValidationMethod: DNS
   
-  # PicotaRoute53RecordSetGroup:
-  #   Type: AWS::Route53::RecordSet
+  # DomainValidationRecord:
+  #   Type: AWS::Route53::RecordSetGroup
   #   Properties:
-  #     Name: picota.org
-  #     Type: CNAME
-  #     HostedZoneId: 
-  #       Ref: HostedZoneId
-  #     AliasTarget:
-  #       DNSName: 
-  #         Fn::GetAtt: ApiGWCustomDomain.DistributionDomainName
-  #       EvaluateTargetHealth: false
-  #       HostedZoneId: 
-  #         Fn::GetAtt: ApiGWCustomDomain.DistributionHostedZoneId
+  #     HostedZoneId: Z03106681HAK9G20RE56N
+  #     RecordSets:
+  #       - Name: !GetAtt DomainNameValidationDNSRecord.Name
+  #         Type: !GetAtt DomainNameValidationDNSRecord.Type
+  #         TTL: 60
+  #         Weight: 1
+  #         SetIdentifier: !Ref Certificate
+  #         ResourceRecords:
+  #           - !GetAtt DomainNameValidationDNSRecord.Value
+
+  #       - Name: !GetAtt AlternativeDomainNameValidationDNSRecord.Name
+  #         Type: !GetAtt AlternativeDomainNameValidationDNSRecord.Type
+  #         TTL: 60
+  #         Weight: 1
+  #         SetIdentifier: !Ref Certificate
+  #         ResourceRecords:
+  #           - !GetAtt AlternativeDomainNameValidationDNSRecord.Value

@@ -74,7 +74,8 @@ Resources:
   PicotaDNSRecords: 
     Type: AWS::Route53::RecordSetGroup
     Properties:
-      HostedZoneId: ${hostedZoneId}
+      HostedZoneId: 
+        Fn::Sub: ${hostedZoneId}
       Comment: add sub domain
       RecordSets:
         - Name: 

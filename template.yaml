@@ -91,9 +91,9 @@ PicotaCertificateFrontend:
       DomainName: 
         Fn::Sub: ${env}.picota.org
       DomainValidationOptions:
-        - DomainName: dev.picota.org
-          HostedZoneId: 
-            Fn::Sub: ${hostedZoneId}
+        DomainName: dev.picota.org
+        HostedZoneId: 
+          Fn::Sub: ${hostedZoneId}
       ValidationMethod: DNS
   
   # DomainValidationRecord:

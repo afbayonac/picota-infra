@@ -85,7 +85,7 @@ Resources:
             DNSName: 
               Fn::GetAtt: PicotaCDNFrontend.DomainName
 
-PicotaCertificateFrontend:
+  PicotaCertificateFrontend:
     Type: AWS::CertificateManager::Certificate
     Properties:
       DomainName: 

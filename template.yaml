@@ -104,7 +104,7 @@ Resources:
         Ref: PicotaCertificateFrontend
       DomainName: dev.picota.org
       ServiceToken: 
-        Fn:Sub: 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:binxio-cfn-certificate-provider'
+        Fn::Sub: 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:binxio-cfn-certificate-provider'
 
   PicotaValidationRecordFrontend:
       Type: AWS::Route53::RecordSetGroup

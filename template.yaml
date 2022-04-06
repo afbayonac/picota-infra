@@ -44,6 +44,8 @@ Resources:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
+        Aliases:
+          - Fn::Sub: ${env}.picota.org
         Origins:
           - DomainName: 
               Fn::GetAtt: [PicotaBucketFrontend, DomainName]
@@ -51,7 +53,8 @@ Resources:
             S3OriginConfig:
               OriginAccessIdentity: 
                 Fn::Sub: 'origin-access-identity/cloudfront/${PicotaCDNOAI}'
-        Enabled: 'true'
+        Enabled: true
+        DefaultRootObject: index.html
         DefaultCacheBehavior:
           AllowedMethods:
             - GET
@@ -63,7 +66,9 @@ Resources:
               Forward: none
           ViewerProtocolPolicy: redirect-to-https
         ViewerCertificate:
-          CloudFrontDefaultCertificate: true
+          AcmCertificateArn: 
+            Fn::GetAtt: PicotaCertificateFrontend.Arn
+          SslSupportMethod: sni-only
 
   PicotaCDNOAI:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
@@ -76,7 +81,6 @@ Resources:
     Properties:
       HostedZoneId: 
         Fn::Sub: ${hostedZoneId}
-      Comment: add sub domain
       RecordSets:
         - Name: 
             Fn::Sub: ${env}.picota.org

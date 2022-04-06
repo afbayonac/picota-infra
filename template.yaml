@@ -96,20 +96,29 @@ Resources:
           HostedZoneId: 
             Fn::Sub: ${hostedZoneId}
       ValidationMethod: DNS
-  
-  DomainValidationRecord:
+
+  PicotaGetValidationDNSRecordFrontend:
+    Type: Custom::CertificateDNSRecord
+    Properties:
+      CertificateArn: 
+        Ref: PicotaCertificateFrontend
+      DomainName: dev.picota.org
+      ServiceToken: 
+        Fn:Sub: 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:binxio-cfn-certificate-provider'
+
+  PicotaValidationRecordFrontend:
       Type: AWS::Route53::RecordSetGroup
       Properties:
         HostedZoneId:  
           Fn::Sub: Ref HostedZoneId
         RecordSets:
           - Name: 
-              Fn::GetAtt: [ DomainNameValidationDNSRecord, Name]
+              Fn::GetAtt: [ PicotaGetValidationDNSRecord, Name]
             Type: 
-              Fn::GetAtt: [ DomainNameValidationDNSRecord, Type]
+              Fn::GetAtt: [ PicotaGetValidationDNSRecord, Type]
             TTL: 60
             Weight: 1
             SetIdentifier: 
               Ref: PicotaCertificateFrontend
             ResourceRecords:
-              - Fn::GetAtt: [ DomainNameValidationDNSRecord, Type]
+              - Fn::GetAtt: [ PicotaGetValidationDNSRecord, Type]

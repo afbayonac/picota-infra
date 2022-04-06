@@ -97,23 +97,19 @@ Resources:
             Fn::Sub: ${hostedZoneId}
       ValidationMethod: DNS
   
-  # DomainValidationRecord:
-  #   Type: AWS::Route53::RecordSetGroup
-  #   Properties:
-  #     HostedZoneId: Z03106681HAK9G20RE56N
-  #     RecordSets:
-  #       - Name: !GetAtt DomainNameValidationDNSRecord.Name
-  #         Type: !GetAtt DomainNameValidationDNSRecord.Type
-  #         TTL: 60
-  #         Weight: 1
-  #         SetIdentifier: !Ref Certificate
-  #         ResourceRecords:
-  #           - !GetAtt DomainNameValidationDNSRecord.Value
-
-  #       - Name: !GetAtt AlternativeDomainNameValidationDNSRecord.Name
-  #         Type: !GetAtt AlternativeDomainNameValidationDNSRecord.Type
-  #         TTL: 60
-  #         Weight: 1
-  #         SetIdentifier: !Ref Certificate
-  #         ResourceRecords:
-  #           - !GetAtt AlternativeDomainNameValidationDNSRecord.Value
+  DomainValidationRecord:
+      Type: AWS::Route53::RecordSetGroup
+      Properties:
+        HostedZoneId:  
+          Fn::Sub: Ref HostedZoneId
+        RecordSets:
+          - Name: 
+              Fn::GetAtt: [ DomainNameValidationDNSRecord, Name]
+            Type: 
+              Fn::GetAtt: [ DomainNameValidationDNSRecord, Type]
+            TTL: 60
+            Weight: 1
+            SetIdentifier: 
+              Ref: PicotaCertificateFrontend
+            ResourceRecords:
+              - Fn::GetAtt: [ DomainNameValidationDNSRecord, Type]

@@ -40,7 +40,7 @@ jobs:
           name: picota-aws-dev-stack
           template: template.yaml
           parameter-overrides: >-
-            env=${{ env.front_domain }},
+            env=${{ env.name }},
             frontDomain=${{ env.front_domain }}
   
   pdn:
@@ -72,7 +72,7 @@ jobs:
           name: picota-aws-dev-stack
           template: template.yaml
           parameter-overrides: >-
-            env=${{ env.front_domain }},
+            env=${{ env.name }},
             frontDomain=${{ env.front_domain }}
 
 

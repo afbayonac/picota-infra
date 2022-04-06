@@ -67,7 +67,7 @@ Resources:
           ViewerProtocolPolicy: redirect-to-https
         ViewerCertificate:
           AcmCertificateArn: 
-            Ref: [PicotaCertificateFrontend, Arn]
+            Ref: PicotaCertificateFrontend
           SslSupportMethod: sni-only
 
   PicotaCDNOAI:

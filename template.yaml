@@ -45,7 +45,7 @@ Resources:
     Properties:
       DistributionConfig:
         Aliases:
-          - Fn::Sub: ${env}.picota.org
+          - Fn::Sub: ${frontDomain}
         Origins:
           - DomainName: 
               Fn::GetAtt: [PicotaBucketFrontend, DomainName]
@@ -83,7 +83,7 @@ Resources:
         Fn::Sub: ${hostedZoneId}
       RecordSets:
         - Name: 
-            Fn::Sub: ${env}.picota.org
+            Fn::Sub: ${frontDomain}
           Type: A
           AliasTarget:
             HostedZoneId: Z2FDTNDATAQYW2
@@ -94,7 +94,7 @@ Resources:
     Type: AWS::CertificateManager::Certificate
     Properties:
       DomainName: 
-        Fn::Sub: ${env}.picota.org
+        Fn::Sub: ${frontDomain}
       DomainValidationOptions:
         - DomainName: dev.picota.org
           HostedZoneId: 

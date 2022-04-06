@@ -18,6 +18,7 @@ jobs:
     if: github.ref == 'refs/heads/trunk' || github.ref == 'refs/heads/develop'
     env: 
       name: dev
+      front_domain: ${{ secrets.FRONT_DOMAIN }}
       aws_key_id: ${{ secrets.AWS_KEY_ID }}
       aws_access_key: ${{ secrets.AWS_KEY_SECRET }}
       aws_region: ${{ secrets.AWS_REGION }}
@@ -28,18 +29,19 @@ jobs:
         id: creds
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_KEY_SECRET }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-access-key-id: ${{ env.aws_key_id }}
+          aws-secret-access-key: ${{ env.aws_access_key }}
+          aws-region: ${{ env.aws_region }}
 
       - name: Deploy to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
+          no-fail-on-empty-changeset: "1"
           name: picota-aws-dev-stack
           template: template.yaml
           parameter-overrides: >-
-            env=dev,
-            frontDomain=${{ secrets.FRONT_DOMAIN }}
+            env=${{ env.front_domain }},
+            frontDomain=${{ env.front_domain }}
   
   pdn:
     needs: dev
@@ -60,6 +62,7 @@ jobs:
       - name: Deploy to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
+          no-fail-on-empty-changeset: "1"
           name: picota-aws-dev-stack
           template: template.yaml
           parameter-overrides: >-

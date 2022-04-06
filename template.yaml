@@ -113,12 +113,13 @@ Resources:
           Fn::Sub: Ref HostedZoneId
         RecordSets:
           - Name: 
-              Fn::GetAtt: [ PicotaGetValidationDNSRecord, Name]
+              Fn::GetAtt: [ PicotaGetValidationDNSRecordFrontend, Name]
             Type: 
-              Fn::GetAtt: [ PicotaGetValidationDNSRecord, Type]
+              Fn::GetAtt: [ PicotaGetValidationDNSRecordFrontend, Type]
             TTL: 60
             Weight: 1
             SetIdentifier: 
               Ref: PicotaCertificateFrontend
             ResourceRecords:
-              - Fn::GetAtt: [ PicotaGetValidationDNSRecord, Type]
+              - 
+                Fn::GetAtt: [ PicotaGetValidationDNSRecordFrontend, Type]

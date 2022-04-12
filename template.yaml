@@ -100,3 +100,8 @@ Resources:
           HostedZoneId: 
             Fn::Sub: ${hostedZoneId}
       ValidationMethod: DNS
+
+  PicotaRepository: 
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: picota-ecr-${env}

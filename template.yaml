@@ -102,7 +102,7 @@ Resources:
       ValidationMethod: DNS
 
   PicotaRepository: 
-    Type: AWS::ECR::Repository
+    Type: AWS::ECR::PublicRepository
     Properties: 
       RepositoryName: 
         Fn::Sub: picota-ecr-${env}

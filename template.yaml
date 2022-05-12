@@ -187,7 +187,7 @@ Resources:
           Value: 60 # default is 300
       TargetType: ip
       VpcId: 
-        Ref: VPicotaVPC
+        Ref: PicotaVPC
 
 
   LoadBalancerSecurityGroup:
@@ -196,7 +196,7 @@ Resources:
       GroupDescription:  
         Fn::Sub: '${ServiceCore}-load-balancer-security-group'
       VpcId: 
-        Ref: VPicotaVPC
+        Ref: PicotaVPC
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 

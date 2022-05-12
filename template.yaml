@@ -179,7 +179,7 @@ Resources:
       UnhealthyThresholdCount: 2
       HealthyThresholdCount: 2
       Name: 
-        Fn::Sub: ${ServiceCore}-target-group
+        Fn::Sub: '${ServiceCore}-target-group'
       Port: 8080
       Protocol: HTTP
       TargetGroupAttributes:
@@ -194,7 +194,7 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription:  
-        Fn:Sub: ${ServiceCore}-load-balancer-security-group
+        Fn:Sub: '${ServiceCore}-load-balancer-security-group'
       VpcId: 
         Ref: VPicotaVPC
       SecurityGroupIngress:

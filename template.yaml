@@ -14,6 +14,8 @@ Parameters:
 
 Resources:
 
+################################################################## FRONTEND 
+
   PicotaBucketFrontend:
     Type: AWS::S3::Bucket
     Properties: 
@@ -101,8 +103,15 @@ Resources:
             Fn::Sub: ${hostedZoneId}
       ValidationMethod: DNS
 
-  PicotaRepository: 
-    Type: AWS::ECR::PublicRepository
-    Properties: 
-      RepositoryName: 
-        Fn::Sub: picota-ecr-${env}
+################################################################# BACKEND
+
+Type: AWS::ECS::Cluster
+Properties: 
+  CapacityProviders: 
+    - FARGATE
+  ClusterName: picota-ecs
+  DefaultCapacityProviderStrategy: 
+    - CapacityProvider: 
+        FARGATE
+      Weight: 1
+

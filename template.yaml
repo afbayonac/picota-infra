@@ -105,7 +105,7 @@ Resources:
 
 ################################################################# BACKEND
 
-  PicotaECS
+  PicotaECS:
     Type: AWS::ECS::Cluster
     Properties: 
       CapacityProviders: 

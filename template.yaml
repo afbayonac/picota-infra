@@ -109,7 +109,6 @@ Resources:
     Type: AWS::ECS::Cluster
     Properties: 
       ClusterName: picota-ecs
-      DefaultCapacityProviderStrategy: 
 
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition

@@ -11,7 +11,10 @@ Parameters:
     Description: ""
     Default: Z03106681HAK9G20RE56N
     Type: String
-
+  ServiceCore:
+    Description: ""
+    Default: picota-backend
+    Type: String
 Resources:
 
 ################################################################## FRONTEND 
@@ -110,13 +113,14 @@ Resources:
     Properties: 
       ClusterName: picota-ecs
 
-  TaskDefinition:
+  PicotaTaskDefinition:
     Type: AWS::ECS::TaskDefinition
     # Makes sure the log group is created before it is used.
 
     Properties:
       # Name of the task definition. Subsequent versions of the task definition are grouped together under this name.
-      Family: picota-core
+      Family: 
+        Fn::Sub: ${ServiceCore}
       # awsvpc is required for Fargate
       NetworkMode: awsvpc
       RequiresCompatibilities:
@@ -140,7 +144,7 @@ Resources:
       # "The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that grants containers in the task permission to call AWS APIs on your behalf."
       #TaskRoleArn: !Ref TaskRole
       ContainerDefinitions:
-        - Name: "picota-core"
+        - Fn::Sub: ${ServiceCore}
           Image: public.ecr.aws/i1o6i3w5/picota-ecr-dev:picota-backend
           PortMappings:
             - ContainerPort: 8080
@@ -153,8 +157,81 @@ Resources:
           #     awslogs-stream-prefix: ecs
   # A role needed by ECS
 
+
+
+  PicotaVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: 'true'
+      EnableDnsHostnames: 'true'
+
+  PicotaTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 10
+      # will look for a 200 status code by default unless specified otherwise
+      HealthCheckPath: /heath
+      HealthCheckTimeoutSeconds: 5
+      UnhealthyThresholdCount: 2
+      HealthyThresholdCount: 2
+      Name: 
+        Fn::Sub: ${}-target-group
+      Port: 8080
+      Protocol: HTTP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: 60 # default is 300
+      TargetType: ip
+      VpcId: 
+        Ref: VPicotaVPCPC
+
+  # PicotaListenerHTTPS:
+  #   Type: AWS::ElasticLoadBalancingV2::Listener
+  #   Properties:
+  #     DefaultActions:
+  #       - TargetGroupArn: 
+  #           Fn::Ref: TargetGroup
+  #         Type: forward
+  #     LoadBalancerArn: !Ref LoadBalancer
+  #     Port: !Ref LoadBalancerPort
+  #     Protocol: HTTPS
+  #     Certificates:
+  #       - CertificateArn: !Ref Certificate
+
+  # Service:
+  #   Type: AWS::ECS::Service
+  #   # This dependency is needed so that the load balancer is setup correctly in time
+  #   DependsOn:
+  #     - ListenerHTTPS
+  #   Properties: 
+  #     ServiceName: !Ref ServiceName
+  #     Cluster: !Ref Cluster
+  #     TaskDefinition: !Ref TaskDefinition
+  #     DeploymentConfiguration:
+  #       MinimumHealthyPercent: 100
+  #       MaximumPercent: 200
+  #     DesiredCount: 2
+  #     # This may need to be adjusted if the container takes a while to start up
+  #     HealthCheckGracePeriodSeconds: 30
+  #     LaunchType: FARGATE
+  #     NetworkConfiguration: 
+  #       AwsvpcConfiguration:
+  #         # change to DISABLED if you're using private subnets that have access to a NAT gateway
+  #         AssignPublicIp: ENABLED
+  #         Subnets:
+  #           - !Ref SubnetA
+  #           - !Ref SubnetB
+  #         SecurityGroups:
+  #           - !Ref ContainerSecurityGroup
+  #     LoadBalancers:
+  #       - ContainerName: !Ref ServiceName
+  #         ContainerPort: !Ref ContainerPort
+  #         TargetGroupArn: !Ref TargetGroup
+
   PicotaRepository: 
     Type: AWS::ECR::PublicRepository
     Properties: 
       RepositoryName: 
         Fn::Sub: picota-ecr-${env}
+

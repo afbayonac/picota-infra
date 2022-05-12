@@ -15,6 +15,9 @@ Parameters:
     Description: ""
     Default: picota-backend
     Type: String
+  LoadBalancerPort:
+    Type: Number
+    Default: 443
 Resources:
 
 ################################################################## FRONTEND 
@@ -176,7 +179,7 @@ Resources:
       UnhealthyThresholdCount: 2
       HealthyThresholdCount: 2
       Name: 
-        Fn::Sub: ${}-target-group
+        Fn::Sub: ${ServiceCore}-target-group
       Port: 8080
       Protocol: HTTP
       TargetGroupAttributes:
@@ -184,7 +187,23 @@ Resources:
           Value: 60 # default is 300
       TargetType: ip
       VpcId: 
-        Ref: VPicotaVPCPC
+        Ref: VPicotaVPC
+
+
+  LoadBalancerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription:  
+        Fn:Sub: ${ServiceCore}-load-balancer-security-group
+      VpcId: 
+        Ref: VPicotaVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 
+            Ref: LoadBalancerPort
+          ToPort: 
+            Ref: LoadBalancerPort
+          CidrIp: 0.0.0.0/0
 
   # PicotaListenerHTTPS:
   #   Type: AWS::ElasticLoadBalancingV2::Listener

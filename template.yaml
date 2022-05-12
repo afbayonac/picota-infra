@@ -111,7 +111,6 @@ Properties:
     - FARGATE
   ClusterName: picota-ecs
   DefaultCapacityProviderStrategy: 
-    - CapacityProvider: 
-        FARGATE
+    - CapacityProvider: FARGATE
       Weight: 1
 

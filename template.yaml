@@ -194,7 +194,7 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription:  
-        Fn:Sub: '${ServiceCore}-load-balancer-security-group'
+        Fn::Sub: '${ServiceCore}-load-balancer-security-group'
       VpcId: 
         Ref: VPicotaVPC
       SecurityGroupIngress:
